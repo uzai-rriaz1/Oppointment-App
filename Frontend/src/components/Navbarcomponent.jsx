@@ -1,36 +1,37 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Menu } from "lucide-react";
-import { X } from "lucide-react";
-import { CircleUserRound } from "lucide-react";
+import { Menu, X, CircleUserRound } from "lucide-react";
 
 const Navbarcomponent = () => {
   const navigate = useNavigate();
+
   const pages = [
     { name: "Doctors", id: 1, route: "/doctors" },
     { name: "Sign In", id: 2, route: "/signin" },
     { name: "Contact Us", id: 3, route: "/contact" },
   ];
+
   const [isopen, setIsopen] = useState(false);
 
   return (
-    <nav className=" flex w-full fixed top-0 left-0 items-center justify-between py-5 px-7">
-      <div>
+    <nav className="w-full fixed top-0 left-0 bg-white shadow-sm z-50">
+      <div className="flex items-center justify-between px-4 sm:px-6 md:px-10 py-4">
         <h1
-          className="font-bold text-3xl hover:cursor-pointer"
+          className="font-bold text-xl sm:text-2xl text-teal-600 cursor-pointer"
           onClick={() => navigate("/")}
         >
           Medify
         </h1>
-      </div>
-      <div className="max-sm:hidden">
-        <ul className="flex space-x-5">
+
+        <ul className="hidden md:flex items-center gap-6 lg:gap-8 font-medium">
           {pages.map((e) => (
             <li key={e.id}>
               <NavLink
                 to={e.route}
                 className={({ isActive }) =>
-                  isActive ? "border-b-2 border-blue-600 pb-1" : ""
+                  isActive
+                    ? "text-teal-600 border-b-2 border-teal-600 pb-1"
+                    : "hover:text-teal-600 transition"
                 }
               >
                 {e.name}
@@ -38,44 +39,50 @@ const Navbarcomponent = () => {
             </li>
           ))}
         </ul>
-      </div>
-      <div>
-        <CircleUserRound onClick={() => navigate("/profile")} size={26} />
-      </div>
-      <div className="md:hidden lg:hidden">
-        {isopen ? (
-          <X
-            className="fixed top-14 z-1 right-5 hover:cursor-pointer"
-            onClick={() => setIsopen(false)}
+
+        <div className="flex items-center gap-3 sm:gap-4">
+          <CircleUserRound
+            onClick={() => navigate("/profile")}
             size={26}
-            color="white"
+            className="cursor-pointer text-gray-600 hover:text-teal-600"
           />
-        ) : (
-          <Menu
-            onClick={() => setIsopen(true)}
-            size={26}
-            className="hover:cursor-pointer"
-          />
-        )}
+
+          <div className="md:hidden">
+            {isopen ? (
+              <X
+                onClick={() => setIsopen(false)}
+                size={28}
+                className="cursor-pointer"
+              />
+            ) : (
+              <Menu
+                onClick={() => setIsopen(true)}
+                size={28}
+                className="cursor-pointer"
+              />
+            )}
+          </div>
+        </div>
       </div>
+
       {isopen && (
-        <div className="bg-blue-600 fixed top-10 right-3 px-8 py-16 rounded-2xl">
-          <ul className="flex flex-col space-x-5 space-y-3">
+        <div className="md:hidden px-4 pb-4">
+          <div className="bg-white rounded-xl shadow-md p-5 space-y-4 border">
             {pages.map((e) => (
-              <li key={e.id}>
-                <NavLink
-                  to={e.route}
-                  className={({ isActive }) =>
-                    isActive
-                      ? "border-b-2 border-white pb-1 text-white"
-                      : "text-white"
-                  }
-                >
-                  {e.name}
-                </NavLink>
-              </li>
+              <NavLink
+                key={e.id}
+                to={e.route}
+                onClick={() => setIsopen(false)}
+                className={({ isActive }) =>
+                  isActive
+                    ? "block text-teal-600 font-semibold"
+                    : "block text-gray-700 hover:text-teal-600"
+                }
+              >
+                {e.name}
+              </NavLink>
             ))}
-          </ul>
+          </div>
         </div>
       )}
     </nav>

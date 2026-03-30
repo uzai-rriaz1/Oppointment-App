@@ -1,60 +1,147 @@
-const Home = () => {
+import { lazy } from "react";
+import { services } from "../assets/services/services";
+import { images } from "../assets/services/services";
+
+export default function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-sky-50 max-sm:mt-10 xl:mt-20 mt-28">
-      <div className="grid place-items-center space-y-5">
-        <h1 className="font-bold text-4xl max-sm:text-2xl text-gray-800">
-          Your Health, Our Priority
-        </h1>
-        <p className="text-2xl text-center max-sm:text-xl md:pl-2 pr-2 text-gray-500">
-          Book appointments with top doctors anytime, anywhere quick, easy, and
-          reliable.
-        </p>
-        <button className="font-medium text-white bg-blue-600 p-5 rounded-full  max-sm:p-3 hover:bg-blue-700 cursor-pointer hover:shadow-lg shadow-blue-500">
-          Book Appointment
-        </button>
-      </div>
-      <div className="space-y-8 px-4">
-        <h1 className="font-bold text-2xl py-5 text-center text-gray-800">
-          Why Choose Us?
-        </h1>
-        <div className="grid grid-cols-4 text-white gap-6 p-4 max-sm:grid-cols-2 max-sm:gap-4 max-sm:p-3  max-md:grid-cols-3 place-items-center bg-blue-600 min-h-72 rounded-lg max-sm:min-h-80">
-          <div className="text-center hover:scale-110 transition-transform ease-out duration-500 hover:bg-white hover:rounded-lg hover:pt-10 hover:pb-10 hover:text-blue-600 max-sm:hover:pt-5 max-sm:hover:pb-5">
-            <h2 className="font-medium text-2xl max-sm:text-xl">
-              Expert Doctors
-            </h2>
-            <h4 className="text-center max-sm:text-sm">
-              Connect with certified and experienced specialists across various
-              medical fields.
-            </h4>
-          </div>
-          <div className="text-center hover:scale-110 transition-transform ease-out duration-500 hover:bg-white hover:rounded-lg hover:pt-10 hover:pb-10 hover:text-blue-600 max-sm:hover:pt-5 max-sm:hover:pb-5">
-            <h2 className="font-medium text-2xl max-sm:text-xl">
-              24/7 Availability
-            </h2>
-            <h4 className="text-center max-sm:text-sm">
-              Book appointments anytime, day or night, according to your
-              schedule.
-            </h4>
-          </div>
-          <div className="text-center hover:scale-110 transition-transform ease-out duration-500 hover:bg-white hover:rounded-lg hover:pt-10 hover:pb-10 hover:text-blue-600 max-sm:hover:pt-5 max-sm:hover:pb-5">
-            <h2 className="font-medium text-2xl max-sm:text-xl">
-              Personalized Care
-            </h2>
-            <h4 className="text-center max-sm:text-sm">
-              Get matched with doctors who understand your unique health needs.
-            </h4>
-          </div>
-          <div className="text-center hover:scale-110 transition-transform ease-out duration-500 hover:bg-white hover:rounded-lg hover:pt-10 hover:pb-10 hover:text-blue-600 max-sm:hover:pt-5 max-sm:hover:pb-5">
-            <h2 className="font-medium text-2xl max-sm:text-xl">Time Saving</h2>
-            <h4 className="text-center max-sm:text-sm">
-              The process eliminates long waits on hold, travel time, and
-              sitting in crowded waiting rooms.
-            </h4>
+    <div className="bg-gray-50 text-gray-700">
+      <section className="grid md:grid-cols-2 items-center px-8 py-16 gap-10">
+        <div>
+          <h2 className="text-4xl font-bold leading-snug">
+            Providing Quality <span className="text-teal-600">Healthcare</span>
+            <br />
+            For A Brighter Future
+          </h2>
+
+          <p className="mt-4 text-gray-500">
+            We are dedicated to providing exceptional healthcare services for
+            all patients.
+          </p>
+
+          <div className="mt-6 flex gap-4">
+            <button className="bg-teal-600 text-white px-6 py-3 rounded-lg">
+              Appointments
+            </button>
+            <button className="border px-6 py-3 rounded-lg">Watch Video</button>
           </div>
         </div>
-      </div>
+
+        <div className="flex justify-center">
+          <img
+            loading="lazy"
+            src={images.doctorsimg}
+            alt="doctor"
+            className="rounded-4xl shadow-lg pt-4"
+          />
+        </div>
+      </section>
+
+      <section className="bg-white mx-8 p-6 rounded-xl shadow-md flex flex-col md:flex-row gap-4 items-center">
+        <input
+          type="text"
+          placeholder="Name"
+          className="border p-3 rounded-lg w-full"
+        />
+        <input
+          type="text"
+          placeholder="Specialty"
+          className="border p-3 rounded-lg w-full"
+        />
+
+        <div className="flex items-center gap-2">
+          <span>Available</span>
+          <input type="checkbox" />
+        </div>
+
+        <button className="bg-teal-600 text-white px-6 py-3 rounded-lg">
+          Search
+        </button>
+      </section>
+
+      <section className="text-center py-16">
+        <h3 className="text-xl font-semibold text-teal-600 mb-10">
+          Our results in numbers
+        </h3>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div>
+            <h4 className="text-2xl font-bold text-teal-600">99%</h4>
+            <p>Customer satisfaction</p>
+          </div>
+          <div>
+            <h4 className="text-2xl font-bold text-teal-600">15k</h4>
+            <p>Online Patients</p>
+          </div>
+          <div>
+            <h4 className="text-2xl font-bold text-teal-600">12k</h4>
+            <p>Patients Recovered</p>
+          </div>
+          <div>
+            <h4 className="text-2xl font-bold text-teal-600">240%</h4>
+            <p>Company growth</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-8 py-16">
+        <h3 className="text-center text-2xl font-bold mb-10">
+          Services we provide
+        </h3>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {services.map((item, i) => (
+            <div key={i} className="bg-white p-4 rounded-xl shadow">
+              <img
+                loading="lazy"
+                src={item.img}
+                alt=""
+                className="rounded-lg mb-3"
+              />
+              <h4 className="font-semibold">{item.name}</h4>
+              <p className="text-sm text-gray-500 mt-2">
+                High quality healthcare service.
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-8 py-16 bg-gray-100">
+        <h3 className="text-center text-2xl font-bold mb-10">
+          Meet our team members
+        </h3>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {["John Carter", "Sophie Moore", "Matt Cannon"].map((name, i) => (
+            <div key={i} className="bg-white p-6 rounded-xl text-center shadow">
+              <img
+                src="https://via.placeholder.com/100"
+                alt=""
+                className="mx-auto rounded-full mb-4"
+              />
+              <h4 className="font-semibold">{name}</h4>
+              <p className="text-sm text-gray-500">Specialist</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-8 py-16">
+        <h3 className="text-center text-2xl font-bold mb-10">Testimonials</h3>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            "An amazing service",
+            "One of a kind service",
+            "The best service",
+          ].map((text, i) => (
+            <div key={i} className="bg-white p-6 rounded-xl shadow">
+              <p>"{text}"</p>
+              <h5 className="mt-4 font-semibold">Client</h5>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
-};
-
-export default Home;
+}

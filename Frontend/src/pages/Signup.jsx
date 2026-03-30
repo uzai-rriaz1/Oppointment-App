@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { routeApi } from "../api/api";
 import { useState } from "react";
-import { Eye } from "lucide-react";
-import { EyeOff } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+
 const Signup = () => {
   const navigate = useNavigate();
   const [showpass, setShowpass] = useState(false);
@@ -25,61 +25,62 @@ const Signup = () => {
       throw new Error("Data didnt sended", error);
     }
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col min-h-screen items-center justify-center bg-sky-50"
+      className="min-h-screen flex items-center justify-center bg-gray-50 px-4"
     >
-      <div className="flex justify-center items-center p-4">
-        <h1 className="font-bold p-2 text-4xl text-gray-800">Sign Up</h1>
-      </div>
-      <div className="flex flex-col items-center justify-center bg-blue-600 space-y-5 py-5 px-3 md:py-10 md:px-6 lg:py-16 lg:px-10   rounded-xl shadow-xl shadow-blue-600">
-        <input
-          id="username"
-          type="text"
-          placeholder="Enter Your username"
-          className="bg-white p-2 rounded-xl w-80 md:p-3 md:w-96 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300
-"
-          {...register("username", {
-            required: "Enter Your username",
-          })}
-        />
-        <div className="flex text-center justify-center">
-          {errors.password && (
-            <p className="text-sky-50  mt-1 text-md">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 sm:p-8 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-800">Sign Up</h1>
+          <p className="text-gray-500 text-sm mt-1">
+            Create your account to get started
+          </p>
+        </div>
+
+        <div>
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter your username"
+            className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            {...register("username", {
+              required: "Enter Your username",
+            })}
+          />
+          {errors.username && (
+            <p className="text-red-500 text-sm mt-1">
               {errors.username.message}
             </p>
           )}
         </div>
 
-        <input
-          id="email"
-          type="email"
-          placeholder="Enter Your Email"
-          className="bg-white p-2 rounded-xl w-80 md:p-3 md:w-96 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300
-"
-          {...register("email", {
-            required: "Enter Your Email",
-            pattern: {
-              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-              message: "Please Enter a Valid Email",
-            },
-          })}
-        />
         <div>
+          <input
+            id="email"
+            type="email"
+            placeholder="Enter your email"
+            className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            {...register("email", {
+              required: "Enter Your Email",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Please Enter a Valid Email",
+              },
+            })}
+          />
           {errors.email && (
-            <p className="text-sky-50 text-md mt-1">{errors.email.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
-        <div>
+        <div className="relative">
           <input
             id="password"
             type={showpass ? "text" : "password"}
-            placeholder="Enter Your Password"
-            className={`bg-white p-2 ml-6 rounded-xl w-80 md:p-3 md:w-96 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300
-         
-            `}
+            placeholder="Enter your password"
+            className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
             {...register("password", {
               required: "Enter Your Password",
               pattern: {
@@ -92,51 +93,50 @@ const Signup = () => {
 
           {!eyeopen ? (
             <button
-              className="relative top-2 right-9 cursor-pointer text-blue-600"
+              type="button"
+              className="absolute right-3 top-3 text-gray-500 hover:text-teal-600"
               onClick={() => {
                 setEyeopen(true);
                 setShowpass(true);
               }}
             >
-              <Eye size={26} />
+              <Eye size={22} />
             </button>
           ) : (
             <button
-              className="relative top-2 right-9 cursor-pointer text-blue-600"
+              type="button"
+              className="absolute right-3 top-3 text-gray-500 hover:text-teal-600"
               onClick={() => {
                 setEyeopen(false);
                 setShowpass(false);
               }}
             >
-              <EyeOff size={26} />
+              <EyeOff size={22} />
             </button>
           )}
 
-          <div className="flex pt-2 justify-center">
-            {errors.password && (
-              <p className="text-sky-50 text-md mt-1">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-2">
+              {errors.password.message}
+            </p>
+          )}
         </div>
 
         <button
           type="submit"
-          className="text-gray-800 bg-white p-3 mt-2 rounded-xl hover:shadow-md shadow-white hover:cursor-pointer"
+          className="w-full bg-teal-600 text-white py-3 rounded-xl font-medium hover:bg-teal-700 transition"
         >
           Sign Up
         </button>
-        <div className="p-2 text-white">
+
+        <div className="text-center text-sm text-gray-600">
           <p>
-            If you have an account?{" "}
+            Already have an account?{" "}
             <span
-              className="hover:text-sky-100 cursor-pointer text-xl"
-              onClick={() => {
-                navigate("/signin");
-              }}
+              className="text-teal-600 cursor-pointer hover:underline"
+              onClick={() => navigate("/signin")}
             >
-              sign in
+              Sign in
             </span>
           </p>
         </div>

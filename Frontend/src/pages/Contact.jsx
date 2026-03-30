@@ -2,79 +2,107 @@ import { Phone, Mail, Map } from "lucide-react";
 
 const Contact = () => {
   return (
-    <div className="grid md:grid-cols-2 place-items-center gap-10 min-h-screen bg-sky-50 px-4">
-      {/* LEFT SIDE */}
-      <div className="flex flex-col justify-center items-center text-center bg-blue-600 rounded-3xl shadow-xl px-10 py-12 md:px-16 lg:px-24">
-        <h1 className="font-bold text-white text-2xl mb-6">
-          Lets Get In Touch
-        </h1>
-
-        <div className="flex flex-col items-center gap-6">
-          <div className="flex flex-col items-center">
-            <Mail size={40} className="text-white mb-2" />
-            <h4 className="text-white font-semibold">Email</h4>
-            <p className="text-blue-100">contact@medify.com</p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <Phone size={40} className="text-white mb-2" />
-            <h4 className="text-white font-semibold">Phone</h4>
-            <p className="text-blue-100">+92-311-999999</p>
-          </div>
-
-          <div className="flex flex-col items-center">
-            <Map size={40} className="text-white mb-2" />
-            <h4 className="text-white font-semibold">Location</h4>
-            <p className="text-blue-100">gulberg v, Lahore</p>
-          </div>
-        </div>
+    <div className="bg-gray-50">
+      <div className="w-full">
+        <img
+          src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3"
+          alt="hospital"
+          className="w-full h-[250px] md:h-[350px] object-cover"
+        />
       </div>
 
-      {/* RIGHT SIDE FORM */}
-      <div className="flex justify-center items-center w-full">
-        <form className="bg-white py-10 px-8 rounded-3xl shadow-2xl w-full max-w-md">
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col">
-              <label htmlFor="name" className="text-gray-700 text-lg mb-1">
-                Name:
-              </label>
-              <input
-                type="text"
-                id="name"
-                placeholder="Enter Your Name"
-                className="p-3 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
+      <div className="max-w-5xl mx-auto px-4 py-16">
+        <div className="text-center mb-10">
+          <p className="text-sm text-gray-500">Get In Touch</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            Contact Us
+          </h1>
+          <p className="text-gray-500 mt-2">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
+        </div>
 
-            <div className="flex flex-col">
-              <label htmlFor="email" className="text-gray-700 text-lg mb-1">
-                Email:
-              </label>
-              <input
-                id="email"
-                type="text"
-                placeholder="Enter Your Email"
-                className="p-3 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
+        <form className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-4">
+            <input
+              type="text"
+              placeholder="Enter your first name"
+              className="p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+            <input
+              type="text"
+              placeholder="Enter your last name"
+              className="p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+          </div>
 
-            <div className="flex flex-col">
-              <label htmlFor="message" className="text-gray-700 text-lg mb-1">
-                Message:
-              </label>
-              <textarea
-                name="message"
-                id="message"
-                placeholder="Enter Your Message"
-                className="p-3 bg-gray-100 rounded-xl h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-              ></textarea>
-            </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+            <input
+              type="text"
+              placeholder="Enter your phone number"
+              className="p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+          </div>
 
-            <button className="bg-blue-600 text-white rounded-xl p-3 hover:bg-blue-700 transition duration-200 shadow-md hover:shadow-lg cursor-pointer">
-              Message
+          <select className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500">
+            <option>Select one...</option>
+            <option>General Inquiry</option>
+            <option>Appointment</option>
+            <option>Support</option>
+          </select>
+
+          <textarea
+            placeholder="Type your message..."
+            className="w-full p-3 rounded-xl border border-gray-300 h-40 resize-none focus:outline-none focus:ring-2 focus:ring-teal-500"
+          ></textarea>
+
+          <div className="flex items-center gap-2">
+            <input type="checkbox" />
+            <label className="text-sm text-gray-600">I accept the terms</label>
+          </div>
+
+          <div className="flex justify-center">
+            <button className="bg-teal-600 text-white px-10 py-3 rounded-xl hover:bg-teal-700 transition">
+              Submit
             </button>
           </div>
         </form>
+      </div>
+
+      <div className="max-w-5xl mx-auto px-4 pb-16 grid md:grid-cols-3 gap-6 text-center">
+        <div>
+          <Mail className="mx-auto text-teal-600 mb-2" size={30} />
+          <p className="text-gray-700">contact@medify.com</p>
+        </div>
+        <div>
+          <Phone className="mx-auto text-teal-600 mb-2" size={30} />
+          <p className="text-gray-700">+92-311-999999</p>
+        </div>
+        <div>
+          <Map className="mx-auto text-teal-600 mb-2" size={30} />
+          <p className="text-gray-700">Gulberg V, Lahore</p>
+        </div>
+      </div>
+
+      <div className="text-center py-10">
+        <h2 className="text-lg font-semibold mb-4">
+          Subscribe to our newsletter
+        </h2>
+        <div className="flex justify-center gap-2 px-4">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="p-3 rounded-full border w-64 focus:outline-none"
+          />
+          <button className="bg-teal-600 text-white px-6 rounded-full">
+            Subscribe
+          </button>
+        </div>
       </div>
     </div>
   );
