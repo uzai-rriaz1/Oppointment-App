@@ -1,25 +1,35 @@
 import mongoose from "mongoose";
-import { User } from "../models/user.model.js";
+import User from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiError } from "../utils/apiError.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const createUser = asyncHandler(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { name, email, password, role, specialization } = req.body;
 
-  if (!username || !email || !password) {
-    throw new apiError(411, "Check You Entered Email, Username and Password");
+  if (!name || !email || !password || !role) {
+    throw new apiError(
+      411,
+      "Check You Entered Email, Username, Password and role",
+    );
   }
 
+  const existed = await User.findOne({ email });
+  if (existed) throw new apiError("400", "Email Already Exist");
+
+  const normalizedemail = email.toLowerCase();
+
   const encryptedPass = await bcrypt.hash(password, 10);
-  const token = jwt.sign({ username, email }, process.env.JWT_SECRET_KEY, {
+  const token = jwt.sign({ name, email }, process.env.JWT_SECRET_KEY, {
     expiresIn: "1d",
   });
   const user = await User.create({
-    username,
-    email,
+    name,
+    email: normalizedemail,
+    role,
     password: encryptedPass,
+    ...(role === "doctor" && { specialization }),
   });
 
   res
