@@ -1,23 +1,66 @@
 import mongoose from "mongoose";
 
-const Userschema = new mongoose.Schema(
+const availabilitySchema = new mongoose.Schema(
   {
-    username: {
+    day: {
+      type: String,
+      enum: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+    },
+    slots: [
+      {
+        start: String, // "09:00"
+        end: String, // "09:30"
+      },
+    ],
+  },
+  { _id: false },
+);
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
       required: true,
     },
+
     email: {
       type: String,
       required: true,
       unique: true,
+      lowercase: true,
     },
+
     password: {
       type: String,
       required: true,
-      minlength: [8, "Password Must Be 8 Characters Long"],
+    },
+
+    role: {
+      type: String,
+      enum: ["patient", "doctor", "admin"],
+      required: true,
+    },
+
+    phone: String,
+
+    specialization: String,
+
+    availability: [availabilitySchema],
+
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true },
 );
 
-export const User = mongoose.model("User", Userschema);
+export default mongoose.model("User", userSchema);
