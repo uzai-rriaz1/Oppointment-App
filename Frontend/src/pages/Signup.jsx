@@ -2,13 +2,22 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { routeApi } from "../api/api";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, CircleCheckBig } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
 
 const Signup = () => {
   const navigate = useNavigate();
   const [showpass, setShowpass] = useState(false);
   const [eyeopen, setEyeopen] = useState(false);
   const [role, setRole] = useState("patient");
+  const notify = () =>
+    toast("Account Created Successfully", {
+      type: "success",
+      progressClassName: "!bg-white",
+      icon: <CircleCheckBig color="white" />,
+      className: "!bg-teal-600 !text-white",
+    });
 
   const {
     register,
@@ -17,33 +26,41 @@ const Signup = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const payload = {
-        name: data.username,
-        email: data.email,
-        password: data.password,
-        role: role,
-        ...(role === "doctor" && {
-          specialization: data.specialization.trim(),
-        }),
-      };
-
-      const response = await routeApi.post("/users/createuser", payload, {
+  const signupMutation = useMutation({
+    mutationKey: ["signup"],
+    mutationFn: async (payload) =>
+      await routeApi.post("/users/createuser", payload, {
         withCredentials: true,
-      });
+      }),
 
-      if (response) {
-        console.log("Data sent successfully", response);
-        navigate("/signin");
-      }
-    } catch (error) {
+    onSuccess: (response) => {
+      console.log("Data sent successfully", response);
+      notify();
+
+      setTimeout(() => navigate("/signin"), 3000);
+    },
+
+    onError: (error) => {
       console.log("FULL ERROR:", error.response);
+
       setError("root", {
         type: "server",
         message: error.response?.data?.message || "Something went wrong",
       });
-    }
+    },
+  });
+
+  const onSubmit = (data) => {
+    const payload = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: role,
+      ...(role === "doctor" && {
+        specialization: data.specialization.trim(),
+      }),
+    };
+    signupMutation.mutate(payload);
   };
 
   return (
@@ -63,6 +80,7 @@ const Signup = () => {
             {errors.root.message}
           </p>
         )}
+        <ToastContainer pauseOnHover={true} position="top-right" />
         <div>
           <select
             className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -79,14 +97,12 @@ const Signup = () => {
             type="text"
             placeholder="Enter your username"
             className="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            {...register("username", {
+            {...register("name", {
               required: "Enter Your username",
             })}
           />
-          {errors.username && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.username.message}
-            </p>
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
 

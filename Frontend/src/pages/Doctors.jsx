@@ -13,7 +13,9 @@ const Doctors = () => {
   } = useQuery({
     queryKey: ["doctors"],
     queryFn: async () => {
-      const res = await routeApi.get("/doctors/doctorsList");
+      const res = await routeApi.get("/doctors/doctorsList", {
+        withCredentials: true,
+      });
       return res.data.doctors;
     },
   });
@@ -44,10 +46,12 @@ const Doctors = () => {
              hover:scale-105 hover:-translate-y-2 hover:shadow-xl"
               >
                 <div className="w-16 h-16 bg-teal-100 text-teal-700 flex items-center justify-center rounded-full text-xl font-bold mb-4">
-                  {doctor.name?.charAt(0)}
+                  {doctor.name?.charAt(0).toUpperCase()}
                 </div>
 
-                <h2 className="text-lg font-semibold">{doctor.name}</h2>
+                <h2 className="text-lg font-semibold">
+                  {doctor.name?.toUpperCase()}
+                </h2>
                 <p className="text-sm text-gray-500 mb-4">
                   {doctor.specialization || "General Physician"}
                 </p>

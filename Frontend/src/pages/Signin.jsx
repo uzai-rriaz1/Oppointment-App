@@ -1,21 +1,54 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, CircleCheckBig } from "lucide-react";
+import { routeApi } from "../api/api";
+import { useMutation } from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/userSlice";
 
 const Signin = () => {
   const navigate = useNavigate();
   const [showpass, setShowpass] = useState(false);
   const [eyeopen, setEyeopen] = useState(false);
+  const dispatch = useDispatch();
+  const notify = () =>
+    toast("LogIn Successfull", {
+      type: "success",
+      progressClassName: "!bg-white",
+      icon: <CircleCheckBig color="white" />,
+      className: "!bg-teal-600 !text-white",
+    });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    reset,
   } = useForm();
 
+  const userLogin = useMutation({
+    mutationKey: ["userLogin"],
+    mutationFn: async (data) => {
+      return await routeApi.post("/users/login", data);
+    },
+    onSuccess: (res) => {
+      const user = res?.data?.user;
+      notify();
+      reset();
+      dispatch(loginUser(user));
+      setTimeout(() => navigate("/"), 3000);
+    },
+    onError: (error) => {
+      console.log(error?.response);
+      setError("root", error?.response?.data);
+    },
+  });
+
   const onSubmit = (data) => {
-    console.log(data);
+    userLogin.mutate(data);
   };
 
   return (
@@ -29,6 +62,12 @@ const Signin = () => {
           <p className="text-gray-500 text-sm mt-1">
             Welcome back! Please enter your details
           </p>
+          {errors.root && (
+            <p className="text-red-500 text-sm text-center mt-1">
+              {errors.root.message}
+            </p>
+          )}
+          <ToastContainer pauseOnHover={true} position="top-right" />
         </div>
 
         <div>
