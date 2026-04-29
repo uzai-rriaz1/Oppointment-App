@@ -44,12 +44,12 @@ const createUser = asyncHandler(async (req, res, next) => {
 export { createUser };
 
 const loginUser = asyncHandler(async (req, res, next) => {
-  const { username, email, password } = req.body;
-  if (!username || !password || !email) {
+  const { email, password } = req.body;
+  if (!password || !email) {
     throw new apiError(400, "Please Enter All the Required Fields");
   }
   console.log(req.body);
-  const user = await User.findOne({ $or: [{ username }, { email }] });
+  const user = await User.findOne({ email });
   if (!user) {
     throw new apiError(400, "User Doesnt Exist");
   }
@@ -59,9 +59,13 @@ const loginUser = asyncHandler(async (req, res, next) => {
     throw new apiError(401, "password is not correct");
   }
   console.log(user);
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "1d",
-  });
+  const token = jwt.sign(
+    { id: user._id, role: user.role, name: user.name },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: "1d",
+    },
+  );
 
   res
     .status(200)
@@ -71,6 +75,8 @@ const loginUser = asyncHandler(async (req, res, next) => {
       message: "Logged in",
       user: {
         id: user._id,
+        name: user.name,
+        role: user.role,
       },
     });
 });
