@@ -10,6 +10,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { StoreProvider } from "./store/Store.jsx";
 import RouteProtector from "./routePotector/RouteProtector.jsx";
 import RoldebasedProtector from "./routePotector/RoldebasedProtector.jsx";
+import Appointment from "./pages/Appointment.jsx";
 
 const queryClient = new QueryClient();
 
@@ -41,7 +42,18 @@ createRoot(document.getElementById("root")).render(
                   </RouteProtector>
                 }
               />
-
+              <Route
+                path={`/appointment/:id`}
+                element={
+                  <RouteProtector>
+                    <RoldebasedProtector>
+                      <Suspense fallback={<div>Loading doctors...</div>}>
+                        <Appointment />
+                      </Suspense>
+                    </RoldebasedProtector>
+                  </RouteProtector>
+                }
+              />
               <Route
                 path="/signin"
                 element={
@@ -63,7 +75,7 @@ createRoot(document.getElementById("root")).render(
               <Route
                 path="/dashboard"
                 element={
-                  <Suspense fallback={<div>Loading contact...</div>}>
+                  <Suspense fallback={<div>Loading Dashboard...</div>}>
                     <Dashboard />
                   </Suspense>
                 }

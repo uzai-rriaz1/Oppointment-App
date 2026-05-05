@@ -39,7 +39,7 @@ const Signin = () => {
       notify();
       reset();
       dispatch(loginUser(user));
-      setTimeout(() => navigate("/"), 3000);
+      setTimeout(() => navigate("/dashboard"), 3000);
     },
     onError: (error) => {
       console.log(error?.response);

@@ -61,7 +61,7 @@ const Doctors = () => {
                 </p>
 
                 <button
-                  onClick={() => navigate(`/doctor/${doctor._id}`)}
+                  onClick={() => navigate(`/appointment/${doctor._id}`)}
                   className="w-full bg-teal-600 text-white py-2 rounded-xl hover:bg-teal-700 cursor-pointer transition"
                 >
                   Book Appointment
