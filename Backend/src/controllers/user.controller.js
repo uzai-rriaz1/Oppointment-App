@@ -83,8 +83,38 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 export { loginUser };
 
-const getUser = asyncHandler(async (req, res, next) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) throw new apiError(404, "USER DOESNT EXIST");
+const logoutUser = asyncHandler(async (req, res, next) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false,
+  });
+  return res.status(200).json({
+    message: "user Got logged Out Successfuly",
+  });
 });
+
+export { logoutUser };
+
+// const getUser = asyncHandler(async (req, res, next) => {
+//   const { email } = req.body;
+//   const user = await User.findOne({ email });
+//   if (!user) throw new apiError(404, "USER DOESNT EXIST");
+// });
+
+const loggedUser = asyncHandler(async (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) throw new apiError(401, "There is NO token");
+  const uncoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+  if (!uncoded) throw new apiError("There is No user");
+
+  const user = await User.findById(uncoded?.id).select("-password");
+  if (!user) throw new apiError(401, "User Is not AUTHORIZED");
+
+  res.status(200).json({
+    user: user,
+  });
+});
+
+export { loggedUser };
