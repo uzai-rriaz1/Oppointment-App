@@ -1,18 +1,45 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Menu, X, CircleUserRound } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../store/userSlice";
+import { useMutation } from "@tanstack/react-query";
+import { routeApi } from "../api/api";
 
 const Navbarcomponent = () => {
   const navigate = useNavigate();
-  const role = useSelector((state) => state.user?.user?.role);
+  const role = useSelector((state) => state?.user?.user?.role);
+  const user = useSelector((state) => state?.user?.user);
 
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      return await routeApi.post(
+        "/users/logout",
+        {},
+        { withCredentials: true },
+      );
+    },
+
+    onSuccess: () => {
+      dispatch(logoutUser());
+      navigate("/signin");
+    },
+
+    onError: (err) => {
+      console.log("Logout failed", err);
+    },
+  });
+
+  const dispatch = useDispatch();
   const pages = [
     ...(role === "patient"
       ? [{ name: "Doctors", id: 1, route: "/doctors" }]
       : []),
-    { name: "Sign In", id: 2, route: "/signin" },
+    ...(user
+      ? [{ name: "Log Out", id: 2 }]
+      : [{ name: "Sign In", id: 2, route: "/signin" }]),
     { name: "Contact Us", id: 3, route: "/contact" },
+    { name: "Dashboard", id: 4, route: "/dashboard" },
   ];
 
   const [isopen, setIsopen] = useState(false);
@@ -28,6 +55,10 @@ const Navbarcomponent = () => {
     setTimeout(() => setShowSidebar(false), 900);
   };
 
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
   return (
     <nav className="w-full fixed top-0 left-0 bg-white shadow-sm z-50">
       <div className="flex items-center justify-between px-4 sm:px-6 md:px-10 py-4">
@@ -40,8 +71,8 @@ const Navbarcomponent = () => {
 
         <ul className="hidden">
           {pages.map((e) => (
-            <li key={e.id}>
-              <NavLink to={e.route}>{e.name}</NavLink>
+            <li key={e?.id}>
+              <NavLink to={e?.route}>{e?.name}</NavLink>
             </li>
           ))}
         </ul>
@@ -90,16 +121,22 @@ const Navbarcomponent = () => {
             <div className="flex flex-col gap-4">
               {pages.map((e) => (
                 <NavLink
-                  key={e.id}
-                  to={e.route}
-                  onClick={handleClose}
+                  key={e?.id}
+                  to={e?.route}
+                  onClick={() => {
+                    if (e?.name === "Log Out") {
+                      handleLogout();
+                    } else {
+                      handleClose();
+                    }
+                  }}
                   className={({ isActive }) =>
                     isActive
                       ? "text-teal-600 font-semibold"
                       : "text-gray-700 hover:text-teal-600"
                   }
                 >
-                  {e.name}
+                  {e?.name}
                 </NavLink>
               ))}
             </div>
@@ -123,8 +160,8 @@ const Navbarcomponent = () => {
           <div className="bg-white rounded-xl shadow-md p-5 space-y-4 border">
             {pages.map((e) => (
               <NavLink
-                key={e.id}
-                to={e.route}
+                key={e?.id}
+                to={e?.route}
                 onClick={() => setIsopen(false)}
                 className={({ isActive }) =>
                   isActive
@@ -132,7 +169,7 @@ const Navbarcomponent = () => {
                     : "block text-gray-700 hover:text-teal-600"
                 }
               >
-                {e.name}
+                {e?.name}
               </NavLink>
             ))}
           </div>
