@@ -4,6 +4,7 @@ import axios from "axios";
 import { routeApi } from "../api/api";
 import { useSelector } from "react-redux";
 import utc from "dayjs/plugin/utc";
+import { Calendar, Clock, Check } from "lucide-react";
 
 import dayjs from "dayjs";
 const daysOfWeek = [
@@ -31,10 +32,25 @@ export default function DoctorDashboard() {
         const res = await routeApi.get(`/appointments/getappointment`, {
           withCredentials: true,
         });
-        console.log(res);
-        return res.data;
+        console.log("Appointments", res);
+        return res?.data;
       } catch (error) {
         console.log("FULL ERROR", error?.response);
+      }
+    },
+  });
+
+  const { data: todayAppointments } = useQuery({
+    queryKey: ["today"],
+    queryFn: async () => {
+      try {
+        const res = await routeApi.get(`/appointments/todayappointments`, {
+          withCredentials: true,
+        });
+        console.log("TODAY APPOINTMENTS", res);
+        return res?.data;
+      } catch (error) {
+        console.log("FULL ERROR Today Appointments", error?.response);
       }
     },
   });
@@ -45,7 +61,7 @@ export default function DoctorDashboard() {
       const res = await routeApi.get(`/doctors/getslots/${id}`, {
         withCredentials: true,
       });
-      console.log(res?.data);
+      console.log("SLOTS", res?.data);
       return res.data?.avaliability;
     },
     enabled: !!id,
@@ -77,29 +93,77 @@ export default function DoctorDashboard() {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Doctor Dashboard</h1>
-        <p className="text-gray-500">Manage your appointments</p>
+    <div className=" bg-gray-100 min-h-screen mt-20 ">
+      <div className="grid grid-cols-2 place-content-center w-full rounded-2xl mb-5  h-80 bg-linear-to-r from-white to-teal-600">
+        <div className="flex flex-col justify-center items-center gap-4">
+          <h1 className="text-3xl font-bold">Welcome Doctor KIM!</h1>
+          <h2 className="text-xl font-semibold">
+            Here's what's happening with your practice today.
+          </h2>
+        </div>
+        <div className="flex items-center justify-between gap-5 p-5">
+          <div className="bg-white rounded-2xl flex px-10 py-10 gap-x-5">
+            <h1>
+              <Calendar
+                className="bg-teal-100 rounded-2xl p-2"
+                color="teal"
+                size={60}
+              />
+            </h1>
+            <div className="flex flex-col gap-5">
+              <h1 className="text-xl font-semibold">
+                Total Appointments Today
+              </h1>
+              <p className="text-4xl font-bold">
+                {todayAppointments?.todayAppointments?.length}
+              </p>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl flex px-10 py-10 gap-x-5">
+            <h1>
+              <Check
+                className="bg-green-100 rounded-2xl p-2"
+                color="green"
+                size={60}
+              />
+            </h1>
+            <div className="flex flex-col gap-5">
+              <h1 className="text-xl font-semibold">Appointments Completed</h1>
+              <p className="text-4xl font-bold">
+                {
+                  appointments?.doctor?.filter(
+                    (slot) => slot?.status === "completed",
+                  ).length
+                }
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-6">
         <div className="col-span-2 bg-white p-4 rounded-2xl shadow">
           <h2 className="font-semibold mb-4">Today's Appointments</h2>
 
-          {/* {appointments.map((appt) => (
+          {todayAppointments?.todayAppointments?.map((appt) => (
             <div
-              key={appt._id}
+              key={appt?._id}
               onClick={() => setSelectedAppointment(appt)}
               className="flex justify-between items-center p-3 mb-2 border rounded-lg cursor-pointer hover:bg-gray-50"
             >
               <div>
-                <p className="font-medium">{appt.patientName}</p>
-                <p className="text-sm text-gray-500">{appt.time}</p>
+                <p className="font-medium">
+                  {appt?.patient?.name[0].toUpperCase() +
+                    appt?.patient?.name?.slice(1)}
+                </p>
+                <p className="text-sm text-gray-500">
+                  {dayjs(appt?.startTime).format("dddd hh:mm A")} - {""}
+                  {dayjs(appt?.endTime).format("hh:mm A")}
+                </p>
               </div>
-              <StatusBadge status={appt.status} />
+              <StatusBadge status={appt?.status} />
             </div>
-          ))} */}
+          ))}
         </div>
 
         <div className="space-y-6">
@@ -246,17 +310,7 @@ export default function DoctorDashboard() {
                         {s.start} - {s.end}
                       </span>
 
-                      <span
-                        className={`${
-                          status === "booked"
-                            ? "text-red-500"
-                            : status === "cancelled"
-                              ? "text-yellow-500"
-                              : "text-green-500"
-                        }`}
-                      >
-                        {status.toUpperCase()}
-                      </span>
+                      <StatusBadge status={status} />
                     </div>
                   );
                 })}
@@ -278,17 +332,19 @@ export default function DoctorDashboard() {
 //   );
 // }
 
-// function StatusBadge({ status }) {
-//   const colors = {
-//     pending: "bg-yellow-100 text-yellow-700",
-//     confirmed: "bg-green-100 text-green-700",
-//     completed: "bg-blue-100 text-blue-700",
-//     cancelled: "bg-red-100 text-red-700",
-//   };
+function StatusBadge({ status }) {
+  const colors = {
+    available: "bg-green-100 text-green-700",
+    booked: "bg-red-100 text-red-700",
+    pending: "bg-yellow-100 text-yellow-700",
+    confirmed: "bg-green-100 text-green-700",
+    completed: "bg-blue-100 text-blue-700",
+    cancelled: "bg-red-100 text-red-700",
+  };
 
-//   return (
-//     <span className={`px-2 py-1 text-sm rounded ${colors[status]}`}>
-//       {status}
-//     </span>
-//   );
-// }
+  return (
+    <span className={`px-2 py-1 text-sm rounded ${colors[status]}`}>
+      {status}
+    </span>
+  );
+}
