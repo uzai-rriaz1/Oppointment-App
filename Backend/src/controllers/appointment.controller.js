@@ -65,3 +65,57 @@ const getAppointments = asyncHandler(async (req, res, next) => {
 });
 
 export { getAppointments };
+
+const todayAppointments = asyncHandler(async (req, res, next) => {
+  const doctor = req.user.id;
+  if (!doctor) throw new apiError(404, "User Doesnt Exist");
+
+  const stratofday = dayjs().startOf("day").toDate();
+  const endofday = dayjs().endOf("day").toDate();
+  const appointments = await Appointment.find({
+    doctor: doctor,
+    startTime: {
+      $gte: stratofday,
+      $lte: endofday,
+    },
+  }).populate("patient", "email name");
+
+  res.status(200).json({
+    success: true,
+    todayAppointments: appointments,
+  });
+});
+
+export { todayAppointments };
+
+// const cancelAppointment = asyncHandler(async (req, res, next) => {
+//   const doctor = req.user.id;
+//   const oppointmentId = req.body;
+//   if (!doctor) throw new apiError(404, "User Doesnt Exist");
+// });
+
+// const completedAppointments = asyncHandler(async(req, res, next)=>{
+//   const user = req.user
+// })
+
+const completedBookings = asyncHandler(async (req, res, next) => {
+  const id = req.params.id;
+  const user = req.user;
+
+  if (!id) throw new apiError(401, "Kindly Select An Slot");
+  const appointment = await Appointment.findById(id);
+
+  if (!appointment) throw new apiError(405, "There is No appointment");
+  if (appointment.status === "completed")
+    throw new apiError(400, "Appointment Already Completed");
+  appointment.status = "completed";
+
+  await appointment.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Appointment Completed",
+  });
+});
+
+export { completedBookings };
