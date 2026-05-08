@@ -5,7 +5,7 @@ import Footer from "./components/Footer";
 import { routeApi } from "./api/api";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { logoutUser } from "./store/userSlice";
+import { logoutUser, setUser } from "./store/userSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,11 +16,19 @@ function App() {
         const res = await routeApi.get("/users/me", {
           withCredentials: true,
         });
-        console.log(res);
+        console.log("CURRENT USER", res);
 
-        dispatch(setUser(res?.data?.user));
+        dispatch(
+          setUser({
+            id: res?.data?.user?._id,
+            email: res?.data?.user?.email,
+            role: res?.data?.user?.role,
+            name: res?.data?.user?.name,
+          }),
+        );
       } catch (err) {
-        dispatch(logoutUser());
+        // dispatch(logoutUser());
+        console.log(err);
       }
     };
 
