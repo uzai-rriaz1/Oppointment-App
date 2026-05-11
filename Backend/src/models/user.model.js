@@ -16,7 +16,7 @@ const availabilitySchema = new mongoose.Schema(
     },
     slots: [
       {
-        start: String, // "09:00"
+        start: String,
         end: String, // "09:30"
       },
     ],

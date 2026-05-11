@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 const appointmentSchema = new mongoose.Schema(
   {
     patient: {
@@ -11,7 +12,10 @@ const appointmentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
+    // day: {
+    //   type: String,
+    //   required: true,
+    // },
     startTime: {
       type: Date,
       required: true,

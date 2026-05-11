@@ -18,9 +18,12 @@ app.use(
 
 import userRoutes from "./routes/user.routes.js";
 import doctorRoutes from "./routes/doctor.routes.js";
-
+import appointmentRoutes from "./routes/appointment.routes.js ";
+import PatientRouter from "./routes/patient.routes.js";
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/doctors", doctorRoutes);
+app.use("/api/v1/appointments", appointmentRoutes);
+app.use("/api/v1/patients", PatientRouter);
 app.use(errorHandler);
 
 export default app;
