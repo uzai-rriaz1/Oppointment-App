@@ -98,7 +98,7 @@ const Navbarcomponent = () => {
           ></div>
 
           <div
-            className={`hidden md:flex fixed top-0 right-0 h-full w-64 bg-white shadow-md z-50 p-6 flex-col transform transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`hidden md:flex fixed top-0 right-0 h-full w-64 bg-white shadow-md z-50 p-6 flex-col transform transition-transform duration-900 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               isopen ? "translate-x-0" : "translate-x-full"
             }`}
           >
