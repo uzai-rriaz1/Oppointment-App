@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { DollarSign, Hospital, Calendar } from "lucide-react";
+import { DollarSign, Hospital, Calendar, CircleCheckBig } from "lucide-react";
 import { routeApi } from "../api/api";
 import { Oval } from "react-loader-spinner";
 import dayjs from "dayjs";
+import { toast, ToastContainer } from "react-toastify";
 
 // 🔥 helper: convert "Monday" → "2026-05-11"
 const getNextDateFromDay = (dayName) => {
@@ -23,7 +24,7 @@ const getNextDateFromDay = (dayName) => {
   const targetDay = daysMap[dayName];
 
   let diff = targetDay - todayDay;
-  if (diff <= 0) diff += 7;
+  if (diff < 0) diff += 7;
 
   return today.add(diff, "day").format("YYYY-MM-DD");
 };
@@ -32,6 +33,14 @@ const Appointment = function () {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const { id } = useParams();
+
+  const notify = () =>
+    toast("Appointment Booked Successfully", {
+      type: "success",
+      progressClassName: "!bg-white",
+      icon: <CircleCheckBig color="white" />,
+      className: "!bg-teal-600 !text-white",
+    });
 
   const { data: doctor, isLoading } = useQuery({
     queryKey: ["doctor", id],
@@ -51,17 +60,22 @@ const Appointment = function () {
   const bookingMutation = useMutation({
     mutationKey: ["booking"],
     mutationFn: async (data) => {
-      await routeApi.post(`/appointments/bookappointment`, data, {
+      return await routeApi.post(`/appointments/bookappointment`, data, {
         withCredentials: true,
       });
     },
     onError: (error) => {
-      console.log("Full error", error?.response?.data);
+      console.log("Full error", error);
     },
     onSuccess: () => {
+      notify();
       console.log("Appointment BOOKED Successfully");
     },
   });
+
+  const slots =
+    doctor?.User?.availability?.find((d) => d.day === selectedDay?.day)
+      ?.slots || [];
 
   return (
     <>
@@ -74,6 +88,7 @@ const Appointment = function () {
         </div>
       ) : (
         <div className="min-h-screen bg-gray-100 p-6 mt-12">
+          <ToastContainer pauseOnHover={true} position="top-right" />
           <div className="max-w-7xl mx-auto grid grid-cols-3 gap-6">
             {/* LEFT SIDE */}
             <div className="bg-white rounded-2xl shadow p-5 space-y-5">
@@ -175,44 +190,39 @@ const Appointment = function () {
 
                 {selectedDay && (
                   <div className="grid grid-cols-4 gap-3">
-                    {doctor?.User?.availability
-                      ?.find((d) => d.day === selectedDay?.day)
-                      ?.slots?.map((slot, i) => {
-                        const isSelected = selectedSlot?.start === slot.start;
+                    {slots.map((slot, i) => {
+                      const isSelected = selectedSlot?.start === slot.start;
 
-                        return (
-                          <button
-                            key={i}
-                            onClick={() =>
-                              setSelectedSlot({
-                                day: selectedDay.day, // for UI
-                                date: selectedDay.date, // 🔥 important
-                                start: slot.start,
-                                end: slot.end,
-                              })
-                            }
-                            className={`p-2 rounded-xl border text-sm ${
-                              isSelected
-                                ? "bg-teal-600 text-white"
-                                : "bg-white hover:border-teal-500"
-                            }`}
-                          >
-                            {slot.start} - {slot.end}
-                          </button>
-                        );
-                      })}
+                      return (
+                        <button
+                          key={i}
+                          onClick={() =>
+                            setSelectedSlot({
+                              day: selectedDay.day,
+                              date: selectedDay.date,
+                              start: slot.start,
+                              end: slot.end,
+                            })
+                          }
+                          className={`p-2 rounded-xl border text-sm ${
+                            isSelected
+                              ? "bg-teal-600 text-white"
+                              : "bg-white hover:border-teal-500"
+                          }`}
+                        >
+                          {dayjs(`2000-01-01 ${slot.start}`).format("hh:mm A")}{" "}
+                          - {dayjs(`2000-01-01 ${slot.end}`).format("hh:mm A")}
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
 
-                {selectedDay &&
-                  !doctor?.User?.availability?.find(
-                    (d) => d.day === selectedDay?.day,
-                  )?.slots?.length && (
-                    <p className="text-gray-400 mt-2">No slots available</p>
-                  )}
+                {selectedDay && !slots.length && (
+                  <p className="text-gray-400 mt-2">No slots available</p>
+                )}
               </div>
 
-              {/* SELECTED */}
               {selectedSlot && (
                 <div className="bg-teal-50 p-4 rounded-xl text-sm">
                   Selected: {selectedSlot.day} • {selectedSlot.start} -{" "}
@@ -225,7 +235,6 @@ const Appointment = function () {
                 className="w-full border rounded-xl p-3"
               />
 
-              {/* BUTTON */}
               <button
                 onClick={() => {
                   bookingMutation.mutate({

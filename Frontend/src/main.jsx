@@ -6,11 +6,17 @@ import App from "./App.jsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Profle from "./pages/Profle.jsx";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import {
+  QueryClientProvider,
+  QueryClient,
+  useQuery,
+} from "@tanstack/react-query";
 import { StoreProvider } from "./store/Store.jsx";
+import { routeApi } from "./api/api.js";
 import RouteProtector from "./routePotector/RouteProtector.jsx";
 import RoldebasedProtector from "./routePotector/RoldebasedProtector.jsx";
 import Appointment from "./pages/Appointment.jsx";
+import { Oval } from "react-loader-spinner";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +41,13 @@ createRoot(document.getElementById("root")).render(
                 element={
                   <RouteProtector>
                     <RoldebasedProtector>
-                      <Suspense fallback={<div>Loading doctors...</div>}>
+                      <Suspense
+                        fallback={
+                          <div className="flex justify-center items-center">
+                            <h1>Loading Doctors....</h1>
+                          </div>
+                        }
+                      >
                         <Doctors />
                       </Suspense>
                     </RoldebasedProtector>
@@ -47,7 +59,13 @@ createRoot(document.getElementById("root")).render(
                 element={
                   <RouteProtector>
                     <RoldebasedProtector>
-                      <Suspense fallback={<div>Loading doctors...</div>}>
+                      <Suspense
+                        fallback={
+                          <div className="flex justify-center items-center">
+                            <Oval color="teal" />
+                          </div>
+                        }
+                      >
                         <Appointment />
                       </Suspense>
                     </RoldebasedProtector>
@@ -57,7 +75,13 @@ createRoot(document.getElementById("root")).render(
               <Route
                 path="/signin"
                 element={
-                  <Suspense fallback={<div>Loading sign in page...</div>}>
+                  <Suspense
+                    fallback={
+                      <div className="flex justify-center items-center">
+                        <Oval color="teal" />
+                      </div>
+                    }
+                  >
                     <Signin />
                   </Suspense>
                 }
@@ -66,7 +90,13 @@ createRoot(document.getElementById("root")).render(
               <Route
                 path="/contact"
                 element={
-                  <Suspense fallback={<div>Loading contact...</div>}>
+                  <Suspense
+                    fallback={
+                      <div className="flex justify-center items-center">
+                        <Oval color="teal" />
+                      </div>
+                    }
+                  >
                     <Contact />
                   </Suspense>
                 }
@@ -75,15 +105,29 @@ createRoot(document.getElementById("root")).render(
               <Route
                 path="/dashboard"
                 element={
-                  <Suspense fallback={<div>Loading Dashboard...</div>}>
-                    <Dashboard />
-                  </Suspense>
+                  <RouteProtector>
+                    <Suspense
+                      fallback={
+                        <div className="flex justify-center items-center">
+                          <Oval color="teal" />
+                        </div>
+                      }
+                    >
+                      <Dashboard />
+                    </Suspense>
+                  </RouteProtector>
                 }
               />
               <Route
                 path="/signup"
                 element={
-                  <Suspense fallback={<div>Loading signup ...</div>}>
+                  <Suspense
+                    fallback={
+                      <div className="flex justify-center items-center">
+                        <Oval color="teal" />
+                      </div>
+                    }
+                  >
                     {<Signup />}
                   </Suspense>
                 }

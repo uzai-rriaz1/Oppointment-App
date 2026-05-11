@@ -1,5 +1,5 @@
 import "./App.css";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbarcomponent from "./components/Navbarcomponent";
 import Footer from "./components/Footer";
 import { routeApi } from "./api/api";
@@ -9,6 +9,7 @@ import { logoutUser, setUser } from "./store/userSlice";
 
 function App() {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -16,7 +17,6 @@ function App() {
         const res = await routeApi.get("/users/me", {
           withCredentials: true,
         });
-        console.log("CURRENT USER", res);
 
         dispatch(
           setUser({
@@ -27,7 +27,6 @@ function App() {
           }),
         );
       } catch (err) {
-        // dispatch(logoutUser());
         console.log(err);
       }
     };
@@ -35,11 +34,20 @@ function App() {
     fetchUser();
   }, []);
 
+  // ✅ better: supports nested routes too
+  const hideLayoutRoutes = ["/signin", "/signup", "/dashboard"];
+
+  const shouldHideLayout = hideLayoutRoutes.some((route) =>
+    location.pathname.startsWith(route),
+  );
+
   return (
     <>
-      <Navbarcomponent />
+      {<Navbarcomponent />}
+
       <Outlet />
-      <Footer />
+
+      {!shouldHideLayout && <Footer />}
     </>
   );
 }

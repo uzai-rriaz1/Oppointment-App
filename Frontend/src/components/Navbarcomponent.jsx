@@ -32,14 +32,16 @@ const Navbarcomponent = () => {
 
   const dispatch = useDispatch();
   const pages = [
+    { name: "Dashboard", id: 4, route: "/dashboard" },
     ...(role === "patient"
       ? [{ name: "Doctors", id: 1, route: "/doctors" }]
       : []),
+
+    { name: "Contact Us", id: 3, route: "/contact" },
+
     ...(user
       ? [{ name: "Log Out", id: 2 }]
       : [{ name: "Sign In", id: 2, route: "/signin" }]),
-    { name: "Contact Us", id: 3, route: "/contact" },
-    { name: "Dashboard", id: 4, route: "/dashboard" },
   ];
 
   const [isopen, setIsopen] = useState(false);
