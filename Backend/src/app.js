@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin:[https://oppointment-p23d7zdon-uzair-riazs-projects-4d0fe642.vercel.app/, "http://localhost:5173"] ,
+    origin:"https://oppointment-p23d7zdon-uzair-riazs-projects-4d0fe642.vercel.app/" ,
     credentials: true,
   }),
 );
