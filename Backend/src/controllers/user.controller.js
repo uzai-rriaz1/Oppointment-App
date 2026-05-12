@@ -81,7 +81,9 @@ const loginUser = asyncHandler(async (req, res) => {
     .status(200)
     .cookie("token", token, {
       httpOnly: true,
-      secure: false,
+      secure: true,
+      sameSite: "none",
+       httpOnly: true,
     })
     .json({
       success: true,
