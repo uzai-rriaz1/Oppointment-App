@@ -4,9 +4,6 @@ import { apiError } from "../utils/apiError.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-//
-// ✅ CREATE USER (FIXED TOKEN + EMAIL NORMALIZATION)
-//
 const createUser = asyncHandler(async (req, res) => {
   const { name, email, password, role, specialization } = req.body;
 
@@ -29,7 +26,6 @@ const createUser = asyncHandler(async (req, res) => {
     ...(role === "doctor" && { specialization }),
   });
 
-  // ✅ FIXED: same token structure everywhere
   const token = jwt.sign(
     { id: user._id, role: user.role, name: user.name },
     process.env.JWT_SECRET_KEY,
@@ -53,9 +49,6 @@ const createUser = asyncHandler(async (req, res) => {
     });
 });
 
-//
-// ✅ LOGIN USER (NORMALIZED + CLEAN)
-//
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -83,7 +76,7 @@ const loginUser = asyncHandler(async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-       httpOnly: true,
+      httpOnly: true,
     })
     .json({
       success: true,
@@ -96,9 +89,6 @@ const loginUser = asyncHandler(async (req, res) => {
     });
 });
 
-//
-// ✅ LOGOUT USER (OK)
-//
 const logoutUser = asyncHandler(async (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -111,9 +101,6 @@ const logoutUser = asyncHandler(async (req, res) => {
   });
 });
 
-//
-// ✅ GET LOGGED USER (SAFE JWT + FIXED ERROR HANDLING)
-//
 const loggedUser = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
 
