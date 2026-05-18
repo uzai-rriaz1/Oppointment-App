@@ -12,16 +12,16 @@ const fileUpload = asyncHandler(async (req, res) => {
     throw new apiError(400, "Please upload a file");
   }
 
-  // convert to base64 for Gemini
+
   const base64Image = file.buffer.toString("base64");
 
-  // 1. AI analysis FIRST
+
   const aiResult = await analyzePrescription({
     base64Image,
     mimeType: file.mimetype,
   });
 
-  // 2. Upload to cloudinary (optional but recommended)
+
   // const cloudinaryResult = await new Promise((resolve, reject) => {
   //   const stream = cloudinary.uploader.upload_stream(
   //     { folder: "prescriptions" },
