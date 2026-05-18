@@ -85,9 +85,7 @@ export default function Home() {
 
           <div className="mt-6 flex gap-4">
             <button
-              onClick=(()=>{
-                naviagte("/signin")
-              })
+            onClick={() => navigate("/signin")}
               className="bg-teal-600 text-white px-6 py-3 rounded-lg">
               Appointments
             </button>
