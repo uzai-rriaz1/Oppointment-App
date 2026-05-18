@@ -5,9 +5,10 @@ import app from "./app.js";
 
 dbConnection()
   .then(() => {
-    const PORT = 3000;
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT || 3000}`);
+    app.listen(process.env.PORT, () => {
+      console.log(
+        `Server running on http://localhost:${process.env.PORT || 3000}`,
+      );
     });
   })
   .catch((error) => {
