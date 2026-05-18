@@ -43,7 +43,7 @@ const appointmentSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-// 🔥 Critical index (prevents duplicate slot at DB level)
+
 appointmentSchema.index(
   { doctor: 1, startTime: 1 },
   { unique: true, partialFilterExpression: { status: "booked" } },
