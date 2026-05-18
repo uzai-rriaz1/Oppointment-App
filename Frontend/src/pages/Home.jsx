@@ -1,9 +1,11 @@
 import { lazy, useState, useRef } from "react";
 import { services } from "../assets/services/services";
 import { images } from "../assets/services/services";
+import { NavLink, useNavigate } from "react-router-dom";
 import { routeApi } from "../api/api";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -82,7 +84,11 @@ export default function Home() {
           </p>
 
           <div className="mt-6 flex gap-4">
-            <button className="bg-teal-600 text-white px-6 py-3 rounded-lg">
+            <button
+              onClick=(()=>{
+                naviagte("/signin")
+              })
+              className="bg-teal-600 text-white px-6 py-3 rounded-lg">
               Appointments
             </button>
             <button className="border px-6 py-3 rounded-lg">Watch Video</button>
