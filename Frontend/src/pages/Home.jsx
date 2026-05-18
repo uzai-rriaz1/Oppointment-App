@@ -3,6 +3,9 @@ import { services } from "../assets/services/services";
 import { images } from "../assets/services/services";
 import { NavLink, useNavigate } from "react-router-dom";
 import { routeApi } from "../api/api";
+import { useSelector } from "react-redux";
+
+
 
 export default function Home() {
   const navigate = useNavigate();
@@ -12,6 +15,8 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
+  const user = useSelector((state) => state?.user?.user?.role);
+
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -85,7 +90,7 @@ export default function Home() {
 
           <div className="mt-6 flex gap-4">
             <button
-            onClick={() => navigate("/signin")}
+            onClick={() => if(!user){navigate("/signin")}else{ navigate("/dashboard")} }
               className="bg-teal-600 text-white px-6 py-3 rounded-lg">
               Appointments
             </button>
