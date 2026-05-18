@@ -67,7 +67,7 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 text-gray-700">
-      {/* Hero */}
+
       <section className="grid md:grid-cols-2 items-center px-8 py-16 gap-10">
         <div>
           <h2 className="text-4xl font-bold leading-snug">
@@ -99,54 +99,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Search Bar */}
-      <section className="bg-white mx-8 p-6 rounded-xl shadow-md flex flex-col md:flex-row gap-4 items-center">
-        <input
-          type="text"
-          placeholder="Name"
-          className="border p-3 rounded-lg w-full"
-        />
-        <input
-          type="text"
-          placeholder="Specialty"
-          className="border p-3 rounded-lg w-full"
-        />
-
-        <div className="flex items-center gap-2">
-          <span>Available</span>
-          <input type="checkbox" />
-        </div>
-
-        <button className="bg-teal-600 text-white px-6 py-3 rounded-lg">
-          Search
-        </button>
-      </section>
-
-      {/* Stats */}
-      <section className="text-center py-16">
-        <h3 className="text-xl font-semibold text-teal-600 mb-10">
-          Our results in numbers
-        </h3>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div>
-            <h4 className="text-2xl font-bold text-teal-600">99%</h4>
-            <p>Customer satisfaction</p>
-          </div>
-          <div>
-            <h4 className="text-2xl font-bold text-teal-600">15k</h4>
-            <p>Online Patients</p>
-          </div>
-          <div>
-            <h4 className="text-2xl font-bold text-teal-600">12k</h4>
-            <p>Patients Recovered</p>
-          </div>
-          <div>
-            <h4 className="text-2xl font-bold text-teal-600">240%</h4>
-            <p>Company growth</p>
-          </div>
-        </div>
-      </section>
 
       {/* ── Prescription Analyzer ── */}
       <section className="px-8 py-16 bg-white">
@@ -216,7 +168,6 @@ export default function Home() {
             )}
           </div>
 
-          {/* Action buttons */}
           {selectedFile && (
             <div className="flex gap-3 mt-4 justify-center">
               <button
@@ -260,14 +211,14 @@ export default function Home() {
             </div>
           )}
 
-          {/* Error */}
+  
           {error && (
             <div className="mt-6 bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 text-sm text-center">
               {error}
             </div>
           )}
 
-          {/* Results */}
+    
           {analysisResult && (
             <div className="mt-8">
               <h4 className="text-lg font-semibold mb-4 text-gray-700">
@@ -343,68 +294,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services */}
-      <section className="px-8 py-16">
-        <h3 className="text-center text-2xl font-bold mb-10">
-          Services we provide
-        </h3>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {services.map((item, i) => (
-            <div key={i} className="bg-white p-4 rounded-xl shadow">
-              <img
-                loading="lazy"
-                src={item.img}
-                alt=""
-                className="rounded-lg mb-3"
-              />
-              <h4 className="font-semibold">{item.name}</h4>
-              <p className="text-sm text-gray-500 mt-2">
-                High quality healthcare service.
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Team */}
-      <section className="px-8 py-16 bg-gray-100">
-        <h3 className="text-center text-2xl font-bold mb-10">
-          Meet our team members
-        </h3>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {["John Carter", "Sophie Moore", "Matt Cannon"].map((name, i) => (
-            <div key={i} className="bg-white p-6 rounded-xl text-center shadow">
-              <img
-                src="https://via.placeholder.com/100"
-                alt=""
-                className="mx-auto rounded-full mb-4"
-              />
-              <h4 className="font-semibold">{name}</h4>
-              <p className="text-sm text-gray-500">Specialist</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="px-8 py-16">
-        <h3 className="text-center text-2xl font-bold mb-10">Testimonials</h3>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            "An amazing service",
-            "One of a kind service",
-            "The best service",
-          ].map((text, i) => (
-            <div key={i} className="bg-white p-6 rounded-xl shadow">
-              <p>"{text}"</p>
-              <h5 className="mt-4 font-semibold">Client</h5>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
