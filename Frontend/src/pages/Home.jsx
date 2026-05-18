@@ -90,7 +90,7 @@ export default function Home() {
 
           <div className="mt-6 flex gap-4">
             <button
-            onClick={() => if(!user){navigate("/signin")}else{ navigate("/dashboard")} }
+            onClick={() => {if(!user){navigate("/signin")}else{ navigate("/dashboard")}} }
               className="bg-teal-600 text-white px-6 py-3 rounded-lg">
               Appointments
             </button>
