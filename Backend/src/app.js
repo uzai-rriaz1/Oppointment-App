@@ -9,8 +9,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    // origin: "https://oppointment-app.vercel.app",
-    origin: "http://localhost:5173",
+    origin: "https://oppointment-app.vercel.app",
+
     credentials: true,
   }),
 );
