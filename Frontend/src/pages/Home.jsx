@@ -72,6 +72,20 @@ export default function Home() {
     return "text-red-500";
   };
 
+  const {
+    data: doctors,
+    isError,
+    isLoading,
+  } = useQuery({
+    queryKey: ["doctors"],
+    queryFn: async () => {
+      const res = await routeApi.get("/doctors/doctorsList", {
+        withCredentials: true,
+      });
+      return res.data.doctors;
+    },
+  });
+  
   return (
     <div className="bg-gray-50 text-gray-700">
 
