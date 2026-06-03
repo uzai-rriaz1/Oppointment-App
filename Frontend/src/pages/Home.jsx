@@ -4,6 +4,7 @@ import { images } from "../assets/services/services";
 import { NavLink, useNavigate } from "react-router-dom";
 import { routeApi } from "../api/api";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
 
 
 
