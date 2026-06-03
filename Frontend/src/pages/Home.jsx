@@ -107,7 +107,41 @@ export default function Home() {
           />
         </div>
       </section>
+      <h1 className="text-center m-5 text-2xl font-bold">
+        Book Our Top Doctors
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {doctors?.map((doctor) => (
+          <div
+            key={doctor?._id}
+            className="bg-white rounded-2xl shadow-md p-5 
+             transition-all duration-300 ease-in-out 
+             hover:scale-105 hover:-translate-y-2 hover:shadow-xl"
+          >
+            <div className="w-16 h-16 bg-teal-100 text-teal-700 flex items-center justify-center rounded-full text-xl font-bold mb-4">
+              {doctor?.name?.charAt(0).toUpperCase()}
+            </div>
 
+            <h2 className="text-lg font-semibold">
+              {doctor?.name?.toUpperCase()}
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              {doctor?.specialization || "General Physician"}
+            </p>
+
+            <p className="text-xs text-gray-400 mb-4">
+              Available slots coming soon
+            </p>
+
+            <button
+              onClick={() => navigate(`/appointment/${doctor._id}`)}
+              className="w-full bg-teal-600 text-white py-2 rounded-xl hover:bg-teal-700 cursor-pointer transition"
+            >
+              Book Appointment
+            </button>
+          </div>
+        ))}
+      </div>
 
       {/* ── Prescription Analyzer ── */}
       <section className="px-8 py-16 bg-white">
