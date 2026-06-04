@@ -1,12 +1,11 @@
-import { lazy, useState, useRef } from "react";
+import { lazy, useState, useRef, useEffect } from "react";
 import { services } from "../assets/services/services";
 import { images } from "../assets/services/services";
 import { NavLink, useNavigate } from "react-router-dom";
 import { routeApi } from "../api/api";
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
-
-
+import { ChevronUp } from "lucide-react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -15,9 +14,9 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [analysisResult, setAnalysisResult] = useState(null);
   const [error, setError] = useState(null);
+  const [showbutton, setShowbutton] = useState(false);
   const fileInputRef = useRef(null);
   const user = useSelector((state) => state?.user?.user?.role);
-
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -86,10 +85,35 @@ export default function Home() {
       return res.data.doctors;
     },
   });
-  
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowbutton(true);
+      } else {
+        setShowbutton(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="bg-gray-50 text-gray-700">
-
+      {showbutton ? (
+        <button
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
+          className="bg-teal-600 fixed top-20 right-1/2 p-2 rounded-3xl text-white hover:cursor-pointer"
+        >
+          <ChevronUp size={26} />
+        </button>
+      ) : null}
       <section className="grid md:grid-cols-2 items-center px-8 py-16 gap-10">
         <div>
           <h2 className="text-4xl font-bold leading-snug">
@@ -105,8 +129,15 @@ export default function Home() {
 
           <div className="mt-6 flex gap-4">
             <button
-            onClick={() => {if(!user){navigate("/signin")}else{ navigate("/dashboard")}} }
-              className="bg-teal-600 text-white px-6 py-3 rounded-lg">
+              onClick={() => {
+                if (!user) {
+                  navigate("/signin");
+                } else {
+                  navigate("/dashboard");
+                }
+              }}
+              className="bg-teal-600 text-white px-6 py-3 rounded-lg"
+            >
               Appointments
             </button>
             <button className="border px-6 py-3 rounded-lg">Watch Video</button>
@@ -269,14 +300,12 @@ export default function Home() {
             </div>
           )}
 
-  
           {error && (
             <div className="mt-6 bg-red-50 border border-red-200 text-red-600 rounded-xl p-4 text-sm text-center">
               {error}
             </div>
           )}
 
-    
           {analysisResult && (
             <div className="mt-8">
               <h4 className="text-lg font-semibold mb-4 text-gray-700">
@@ -338,7 +367,7 @@ export default function Home() {
               ) : analysisResult.raw_response ? (
                 <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">
                   <p className="font-medium mb-1">Raw AI Response:</p>
-                  <pre className="whitespace-pre-wrap break-words text-xs">
+                  <pre className="whitespace-pre-wrap warp-break-words text-xs">
                     {analysisResult.raw_response}
                   </pre>
                 </div>
@@ -351,7 +380,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
     </div>
   );
 }
