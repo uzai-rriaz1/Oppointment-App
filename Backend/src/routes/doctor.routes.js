@@ -10,9 +10,7 @@ import authorizedRoles from "../middlewares/authorizedRoles.js";
 
 const router = Router();
 
-router
-  .route("/doctorsList")
-  .get(jwtAuth, authorizedRoles("patient"), doctorsList);
+router.route("/doctorsList").get(doctorsList);
 router
   .route("/slots")
   .post(jwtAuth, authorizedRoles("doctor"), doctorAvailibility);
